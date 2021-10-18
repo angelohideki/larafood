@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
+    private $repository;
+
+    public function __construct(Plan $plan)
+    {
+        $this->repository = $plan;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,8 @@ class PlanController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.plans.index');
+        $plans = $this->repository->latest()->paginate(15);
+        return view('admin.pages.plans.index', ['plans' => $plans]);
     }
 
     /**
@@ -24,7 +32,7 @@ class PlanController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.plans.create');
     }
 
     /**
@@ -38,15 +46,17 @@ class PlanController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show($url)
     {
-        //
+        $plan = $this->repository->where('url', $url)->first();
+
+        if (!$plan)
+            return redirect()->back();
+
+        return view('admin.pages.plans.show', [
+            'plan' => $plan
+        ]);
+
     }
 
     /**
@@ -78,8 +88,24 @@ class PlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($url)
     {
-        //
+        $plan = $this->repository->where('url', $url)->first();
+
+        if (!$plan)
+            return redirect()->back();
+
+        $plan->delete();
+        return redirect()->route('plans.index');
+    }
+
+    public function search(Request $request)
+    {
+        $filters = $request->except('_token');
+        $plans = $this->repository->search($request->filter);
+        return view('admin.pages.plans.index', [
+            'plans'   => $plans,
+            'filters' => $filters,
+        ]);
     }
 }
