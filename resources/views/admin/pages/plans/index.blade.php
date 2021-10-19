@@ -4,11 +4,11 @@
 
 @section('content_header')
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a href="{{ route('plans.index') }}" class="active">Planos</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('plans.index') }}" class="active">Planos </a></li>
     </ol>
 
-    <h1>Planos <a href="{{ route('plans.create') }}" class="btn btn-dark">ADD</a></h1>
+    <h1>Planos <a href="{{ route('plans.create') }}" class="btn btn-dark">ADD <i class="fas fa-plus-square"></i></a></h1>
 @stop
 
 @section('content')
@@ -39,8 +39,8 @@
                                 R$ {{ number_format($plan->price, 2, ',', '.') }}
                             </td>
                             <td style="width=10px;">
-                                <a href="" class="btn btn-primary">Detalhes</a>
-                                <a href="" class="btn btn-info">Edit</a>
+                                <a href="{{ route('details.plan.index', $plan->url) }}" class="btn btn-primary">Detalhes</a>
+                                <a href="{{ route('plans.edit', $plan->url) }}" class="btn btn-info">Edit</a>
                                 <a href="{{ route('plans.show', $plan->url) }}" class="btn btn-warning">VER</a>
                                 <a href="" class="btn btn-warning"><i class="fas fa-address-book"></i></a>
                             </td>
@@ -50,7 +50,11 @@
             </table>
         </div>
         <div class="card-footer">
-            
+            @if (isset($filters))
+                {!! $plans->appends($filters)->links() !!}
+            @else
+                {!! $plans->links() !!}
+            @endif
         </div>
     </div>
 @stop
