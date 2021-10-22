@@ -14,6 +14,20 @@ Route::prefix('admin')
     ->namespace('Admin')
     ->group(function(){
         /**
+         * Routes Permissions 
+         */
+        Route::resource('permissions', 'ACL\PermissionController');
+        Route::any('permissions/search', 'ACL\PermissionController@search')->name('permissions.search');
+        
+        
+        /**
+         * Routes Profiles 
+         */
+        Route::resource('profiles', 'ACL\ProfileController');
+        Route::any('profiles/search', 'ACL\ProfileController@search')->name('profiles.search');
+        //Route::resource('roles', 'ACL\RoleController');
+
+        /**
          * Routes Details Plans
          */
         Route::delete('plans/{url}/details/{idDetail}', 'DetailPlanController@destroy')->name('details.plan.destroy');
