@@ -17,7 +17,7 @@
         <div class="card-header">
             <form action="{{ route('profiles.permissions.available', $profile->id) }}" method="POST" class="form form-inline">
                 @csrf
-                <input type="text" name="filter" placeholder="Filtro" class="form-control" value="{{ $filters['filter'] ?? '' }}">
+                <input type="text" name="filter" placeholder="Filtro" class="form-control" value="">
                 <button type="submit" class="btn btn-dark">Filtrar</button>
             </form>
         </div>
