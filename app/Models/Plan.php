@@ -4,18 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Plan extends Model {
+class Plan extends Model 
+{
 	protected $fillable = ['name', 'url', 'price', 'description'];
 
-	public function details() {
+	public function details() 
+	{
 		return $this->hasMany(DetailPlan::class);
 	}
 
-	public function profiles() {
+	public function profiles() 
+	{
 		return $this->belongsToMany(Profile::class);
 	}
 
-	public function search($filter = null) {
+	public function tenants()
+	{
+		return $this->hasMany(Tenant::class);
+	}
+
+	public function search($filter = null) 
+	{
 		$results = $this->where('name', 'LIKE', "%{$filter}%")
 			->orWhere('description', 'LIKE', "%{$filter}%")
 			->paginate(10);
@@ -26,7 +35,8 @@ class Plan extends Model {
 	/**
 	 * Profiles not linked with this profile
 	 */
-	public function profilesAvailable($filter = null) {
+	public function profilesAvailable($filter = null) 
+	{
 		$profiles = Profile::whereNotIn('profiles.id', function ($query) {
 			$query->select('plan_profile.profile_id');
 			$query->from('plan_profile');

@@ -12,13 +12,16 @@ class SiteController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
+	public function index() 
+	{
 		$plans = Plan::with('details')->orderBy('price', 'ASC')->get();
 
 		return view('site.pages.home.index', compact('plans'));
 	}
 
-	public function plan($url) {
+	public function plan($url) 
+	{
+
 		if (!$plan = Plan::where('url', $url)->first()) {
 			return redirect()->back();
 		}

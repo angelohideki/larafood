@@ -15,7 +15,13 @@ Route::prefix('admin')
 	->middleware('auth')
 	->group(function () {
 
-		/**
+	/** Routes Users
+	 */
+		Route::resource('users', 'UserController');
+		Route::any('users/search', 'UserController@search')->name('users.search');
+		//Route::resource('roles', 'ACL\RoleController');
+
+	/**
 	 * Plan x Profile
 	 */
 		Route::get('plans/{id}/profile/{idProfile}/detach', 'ACL\PlanProfileController@detachProfilePlan')->name('plans.profile.detach');
@@ -47,7 +53,7 @@ Route::prefix('admin')
 		Route::any('profiles/search', 'ACL\ProfileController@search')->name('profiles.search');
 		//Route::resource('roles', 'ACL\RoleController');
 
-		/**
+	/**
 	 * Routes Details Plans
 	 */
 		Route::delete('plans/{url}/details/{idDetail}', 'DetailPlanController@destroy')->name('details.plan.destroy');
@@ -79,7 +85,7 @@ Route::prefix('admin')
 /**
  * Site
  */
-//Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
+Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
 Route::get('/', 'Site\SiteController@index')->name('site.home');
 
 Auth::routes();

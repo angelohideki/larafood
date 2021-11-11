@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\TenantService;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +35,8 @@ class RegisterController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		$this->middleware('guest');
 	}
 
@@ -44,11 +46,15 @@ class RegisterController extends Controller {
 	 * @param  array  $data
 	 * @return \Illuminate\Contracts\Validation\Validator
 	 */
-	protected function validator(array $data) {
+	protected function validator(array $data) 
+	{
+		
 		return Validator::make($data, [
-			'name' => ['required', 'string', 'max:255'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'string', 'min:8', 'confirmed'],
+			'name'     => ['required', 'string', 'min:3', 'max:255'],
+			'email'    => ['required', 'string', 'email', 'min:3', 'max:255', 'unique:users'],
+			'password' => ['required', 'string','min:4', 'max:255', 'confirmed'],
+			'empresa'  => ['required', 'string', 'min:4', 'max:255', 'unique:tenants,name'],
+			'cnpj'     => ['required', 'numeric', 'min:14', 'unique:tenants'],
 		]);
 	}
 
@@ -59,10 +65,12 @@ class RegisterController extends Controller {
 	 * @return \App\User
 	 */
 	protected function create(array $data) {
-		return User::create([
-			'name' => $data['name'],
-			'email' => $data['email'],
-			'password' => Hash::make($data['password']),
-		]);
+		if(!$plan = session('plan')){
+			return redirect()->route('site.home');
+		}
+
+		$tenantService = app(TenantService::class);
+		
+		return $tenantService->make($plan, $data);
 	}
 }
