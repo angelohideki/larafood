@@ -32,7 +32,7 @@ class StoreUpdateUser extends FormRequest
         ];
 
         if ($this->method() == 'PUT') {
-            $rules['password'] = ['nullable', 'string', 'min:6', 'max:16'];
+            $rules['password'] = ['nullable', 'string', 'min:4', 'max:16'];
         }
 
         return $rules;

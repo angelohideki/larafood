@@ -65,6 +65,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        
         if (!$user = $this->repository->tenantUser()->find($id)) {
             return redirect()->back();
         }
@@ -81,6 +82,7 @@ class UserController extends Controller
     public function edit($id)
     {
         if (!$user = $this->repository->tenantUser()->find($id)) {
+        
             return redirect()->back();
         }
 
@@ -97,6 +99,7 @@ class UserController extends Controller
     public function update(StoreUpdateUser $request, $id)
     {
         if (!$user = $this->repository->tenantUser()->find($id)) {
+        
             return redirect()->back();
         }
 
@@ -120,6 +123,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         if (!$user = $this->repository->tenantUser()->find($id)) {
+        
             return redirect()->back();
         }
 
