@@ -8,7 +8,7 @@
         <li class="breadcrumb-item active"><a href="{{ route('plans.index') }}" class="active">Planos </a></li>
     </ol>
 
-    <h1>Planos <a href="{{ route('plans.create') }}" class="btn btn-dark">ADD <i class="fas fa-plus-square"></i></a></h1>
+    <h1>Planos <a href="{{ route('plans.create') }}" class="btn btn-dark"><i class="fas fa-plus-square"></i></a></h1>
 @stop
 
 @section('content')

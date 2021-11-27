@@ -246,6 +246,11 @@ return [
             'url'  => 'admin/users',
             'icon'  => 'fas fa-users',
         ],
+        [
+            'text' => 'Categorias',
+            'url'  => 'admin/categories',
+            'icon'  => 'fas fa-layer-group',
+        ],
 
         // Sidebar items:
         [
