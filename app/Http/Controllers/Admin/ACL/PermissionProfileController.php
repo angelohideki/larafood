@@ -8,6 +8,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 
 class PermissionProfileController extends Controller {
+	
 	protected $profile, $permission;
 
 	public function __construct(Profile $profile, Permission $permission) {

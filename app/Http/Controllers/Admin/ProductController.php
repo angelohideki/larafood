@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -110,10 +111,15 @@ class ProductController extends Controller
         $tenant = auth()->user()->tenant;
 
         if ($request->hasFile('image') && $request->image->isValid()) {
+
+            if(Storage::exists($product->image)){
+                Storage::delete($product->image);
+            }
+
             $data['image'] = $request->image->store("tenants/{$tenant->uuid}/products");
         }
 
-        $product->update();
+        $product->update($data);
 
         return redirect()->route('products.index');
     }
@@ -126,11 +132,15 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        if (!$produtc = $this->repository->find($id)) {
+        if (!$product = $this->repository->find($id)) {
             return redirect()->back();
         }
 
-        $produtc->delete();
+        if (Storage::exists($product->image)) {
+            Storage::delete($product->image);
+        }
+
+        $product->delete();
 
         return redirect()->route('products.index');
     }

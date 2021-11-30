@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateDetailPlan;
 use App\Models\DetailPlan;
 use App\Models\Plan;
-use Illuminate\Http\Request;
 
 class DetailPlanController extends Controller
 {
