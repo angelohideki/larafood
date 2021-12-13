@@ -15,6 +15,11 @@ Route::prefix('admin')
 	->middleware('auth')
 	->group(function () {
 
+		Route::get('test-acl', function(){
+			//dd(auth()->user()->hasPermission('Permissão 1'));
+			dd(auth()->user()->isAdmin());
+		});
+
 	/**
 	 * Routes Table
 	 */

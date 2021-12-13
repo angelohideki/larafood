@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
-    //use UserACLTrait;
+    use UserACLTrait;
 
     /**
      * The attributes that are mass assignable.
