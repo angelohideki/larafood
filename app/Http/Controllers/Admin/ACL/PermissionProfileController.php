@@ -7,18 +7,20 @@ use App\Models\Permission;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 
-class PermissionProfileController extends Controller {
+class PermissionProfileController extends Controller 
+{
 	
 	protected $profile, $permission;
 
-	public function __construct(Profile $profile, Permission $permission) {
+	public function __construct(Profile $profile, Permission $permission) 
+	{
 		$this->profile = $profile;
 		$this->permission = $permission;
-
-		// $this->middleware(['can:profiles']);
+		$this->middleware(['can:profiles']);
 	}
 
-	public function permissions($idProfile) {
+	public function permissions($idProfile) 
+	{
 		$profile = $this->profile->find($idProfile);
 
 		if (!$profile) {
@@ -30,7 +32,8 @@ class PermissionProfileController extends Controller {
 		return view('admin.pages.profiles.permissions.permissions', compact('profile', 'permissions'));
 	}
 
-	public function profiles($idPermission) {
+	public function profiles($idPermission) 
+	{
 		if (!$permission = $this->permission->find($idPermission)) {
 			return redirect()->back();
 		}
@@ -40,7 +43,8 @@ class PermissionProfileController extends Controller {
 		return view('admin.pages.permissions.profiles.profiles', compact('permission', 'profiles'));
 	}
 
-	public function permissionsAvailable(Request $request, $idProfile) {
+	public function permissionsAvailable(Request $request, $idProfile) 
+	{
 
 		if (!$profile = $this->profile->find($idProfile)) {
 			return redirect()->back();
@@ -53,7 +57,8 @@ class PermissionProfileController extends Controller {
 		return view('admin.pages.profiles.permissions.available', compact('profile', 'permissions', 'filters'));
 	}
 
-	public function attachPermissionsProfile(Request $request, $idProfile) {
+	public function attachPermissionsProfile(Request $request, $idProfile) 
+	{
 
 		if (!$profile = $this->profile->find($idProfile)) {
 			return redirect()->back();
@@ -70,7 +75,8 @@ class PermissionProfileController extends Controller {
 		return redirect()->route('profiles.permissions', $profile->id);
 	}
 
-	public function detachPermissionProfile($idProfile, $idPermission) {
+	public function detachPermissionProfile($idProfile, $idPermission) 
+	{
 		$profile = $this->profile->find($idProfile);
 		$permission = $this->permission->find($idPermission);
 

@@ -15,11 +15,38 @@ Route::prefix('admin')
 	->middleware('auth')
 	->group(function () {
 
-		Route::get('test-acl', function(){
+		//Route::get('test-acl', function(){
 			//dd(auth()->user()->hasPermission('Permissão 1'));
-			dd(auth()->user()->isAdmin());
-		});
+			//dd(auth()->user()->isAdmin());
+		//});
+	/**
+     * Role x User
+     */
+    Route::get('users/{id}/role/{idRole}/detach', 'ACL\RoleUserController@detachRoleUser')->name('users.role.detach');
+    Route::post('users/{id}/roles', 'ACL\RoleUserController@attachRolesUser')->name('users.roles.attach');
+    Route::any('users/{id}/roles/create', 'ACL\RoleUserController@rolesAvailable')->name('users.roles.available');
+    Route::get('users/{id}/roles', 'ACL\RoleUserController@roles')->name('users.roles');
+    Route::get('roles/{id}/users', 'ACL\RoleUserController@users')->name('roles.users');
 
+	/**
+     * Permission x Role
+     */
+    Route::get('roles/{id}/permission/{idPermission}/detach', 'ACL\PermissionRoleController@detachPermissionRole')->name('roles.permission.detach');
+    Route::post('roles/{id}/permissions', 'ACL\PermissionRoleController@attachPermissionsRole')->name('roles.permissions.attach');
+    Route::any('roles/{id}/permissions/create', 'ACL\PermissionRoleController@permissionsAvailable')->name('roles.permissions.available');
+    Route::get('roles/{id}/permissions', 'ACL\PermissionRoleController@permissions')->name('roles.permissions');
+    Route::get('permissions/{id}/role', 'ACL\PermissionRoleController@roles')->name('permissions.roles');
+	/**
+	 * Routes Roles
+	 */
+	Route::resource('roles', 'ACL\RoleController');
+	Route::any('roles/search', 'ACL\RoleController@search')->name('roles.search');
+
+	/**
+	 * Routes Tenants
+	 */
+	Route::any('tenants/search', 'TenantController@search')->name('tenants.search');
+	Route::resource('tenants', 'TenantController');
 	/**
 	 * Routes Table
 	 */
@@ -72,13 +99,13 @@ Route::prefix('admin')
 		Route::get('profiles/{id}/permission', 'ACL\PermissionProfileController@permissions')->name('profiles.permissions');
 		Route::get('permissions/{id}/profiles', 'ACL\PermissionProfileController@profiles')->name('permissions.profiles');
 
-		/**
+	/**
 	 * Routes Permissions
 	 */
 		Route::resource('permissions', 'ACL\PermissionController');
 		Route::any('permissions/search', 'ACL\PermissionController@search')->name('permissions.search');
 
-		/**
+	/**
 	 * Routes Profiles
 	 */
 		Route::resource('profiles', 'ACL\ProfileController');
@@ -96,7 +123,7 @@ Route::prefix('admin')
 		Route::post('plans/{url}/details', 'DetailPlanController@store')->name('details.plan.store');
 		Route::get('plans/{url}/details', 'DetailPlanController@index')->name('details.plan.index');
 
-		/**
+	/**
 	 * Routes Plans
 	 */
 		Route::get('plans/create', 'PlanController@create')->name('plans.create');
@@ -108,16 +135,16 @@ Route::prefix('admin')
 		Route::post('plans', 'PlanController@store')->name('plans.store');
 		Route::get('plans', 'PlanController@index')->name('plans.index');
 
-		/**
+	/**
 	 * Home Dashboard
 	 */
 		Route::get('/', 'PlanController@index')->name('admin.index');
 	});
 
-/**
- * Site
- */
-Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
-Route::get('/', 'Site\SiteController@index')->name('site.home');
+	/**
+	 * Site
+	 */
+	Route::get('/plan/{url}', 'Site\SiteController@plan')->name('plan.subscription');
+	Route::get('/', 'Site\SiteController@index')->name('site.home');
 
 Auth::routes();

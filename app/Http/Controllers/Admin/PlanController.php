@@ -15,6 +15,7 @@ class PlanController extends Controller
     public function __construct(Plan $plan)
     {
         $this->repository = $plan;
+        $this->middleware(['can:plans']);
     }
     /**
      * Display a listing of the resource.

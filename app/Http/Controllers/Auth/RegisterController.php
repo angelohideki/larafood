@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use App\Services\TenantService;
+use App\Tenant\Events\TenantCreated;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +30,7 @@ class RegisterController extends Controller {
 	 *
 	 * @var string
 	 */
-	protected $redirectTo = '/admin';
+	protected $redirectTo = '/admin/tenants';
 
 	/**
 	 * Create a new controller instance.
@@ -37,7 +39,7 @@ class RegisterController extends Controller {
 	 */
 	public function __construct() 
 	{
-		$this->middleware('guest');
+		$this->middleware('guest')->except('logout');;
 	}
 
 	/**
@@ -53,7 +55,7 @@ class RegisterController extends Controller {
 			'name'     => ['required', 'string', 'min:3', 'max:255'],
 			'email'    => ['required', 'string', 'email', 'min:3', 'max:255', 'unique:users'],
 			'password' => ['required', 'string','min:4', 'max:255', 'confirmed'],
-			'empresa'  => ['required', 'string', 'min:4', 'max:255', 'unique:tenants,name'],
+			'empresa'  => ['required', 'string', 'min:3', 'max:255', 'unique:tenants,name'],
 			'cnpj'     => ['required', 'numeric', 'min:14', 'unique:tenants'],
 		]);
 	}
@@ -64,13 +66,18 @@ class RegisterController extends Controller {
 	 * @param  array  $data
 	 * @return \App\User
 	 */
-	protected function create(array $data) {
-		if(!$plan = session('plan')){
-			return redirect()->route('site.home');
-		}
+	protected function create(array $data)
+    {
+        if (!$plan = session('plan')) {
+            return redirect()->route('site.home');
+        }
 
-		$tenantService = app(TenantService::class);
-		
-		return $tenantService->make($plan, $data);
-	}
+        $tenantService = app(TenantService::class);
+
+        $user = $tenantService->make($plan, $data);
+
+        event(new TenantCreated($user));
+
+        return $user;
+    }
 }

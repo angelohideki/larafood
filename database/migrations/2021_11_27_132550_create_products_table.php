@@ -16,18 +16,18 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tenant_id');
-            $table->string('title')->unique();
-            $table->string('flag')->unique();
-            $table->string('image');
             $table->uuid('uuid');
+            $table->string('title');
+            $table->string('flag');
+            $table->string('image');
             $table->double('price', 10, 2);
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->timestamps();
 
             $table->foreign('tenant_id')
-                ->references('id')
-                ->on('tenants')
-                ->onDelete('cascade');
+                        ->references('id')
+                        ->on('tenants')
+                        ->onDelete('cascade');
         });
 
         Schema::create('category_product', function (Blueprint $table) {
@@ -36,13 +36,13 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('product_id');
 
             $table->foreign('category_id')
-            ->references('id')
-            ->on('categories')
-            ->onDelete('cascade');
+                        ->references('id')
+                        ->on('categories')
+                        ->onDelete('cascade');
             $table->foreign('product_id')
-            ->references('id')
-            ->on('products')
-            ->onDelete('cascade');
+                        ->references('id')
+                        ->on('products')
+                        ->onDelete('cascade');
         });
     }
 
@@ -53,6 +53,7 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('category_product');
         Schema::dropIfExists('products');
     }
 }
