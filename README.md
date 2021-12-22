@@ -9,7 +9,7 @@
 
 ## LaraFood - Sistema de Delivery Laravel
 
-Sistema de delivery desenvolvido com o framework Laravel.
+Sistema de delivery em desenvolvimento com o framework Laravel.
 
 
 
